@@ -2,8 +2,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { removeStudent } from '../store';
 
 export class Students extends Component {
+
+  constructor (props) {
+    super(props);
+
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete (student) {
+    this.props.deleteStudent(student);
+  }
 
   render () {
 
@@ -20,6 +31,8 @@ export class Students extends Component {
                 <Link to={`/students/${student.id}`}>
                   <h3>#{student.id} - {student.name} - {student.campus.name}</h3>
                 </Link>
+                <button className="btn btn-default"
+                onClick={() => this.handleDelete(student)}>Delete</button>
               </div>
             ))
           }
@@ -37,4 +50,13 @@ const mapStateToProps = function (state) {
   };
 };
 
-export default connect(mapStateToProps)(Students);
+const mapDispatchToProps = function (dispatch, ownProps) {
+  const history = ownProps.history;
+  return {
+    deleteStudent: function(student) {
+      dispatch(removeStudent(student, history));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Students);
