@@ -18,6 +18,9 @@ export class SingleCampus extends Component {
         <h1>CAMPUS</h1>
         <hr/><hr/>
         <h2>{selectedCampus.name} </h2>
+        <Link to={`/campuses/${selectedCampus.id}/edit`}>
+          <button className="btn btn-default">Edit</button>
+        </Link>
         <img src={ selectedCampus.image } />
         <h3>ENROLLMENT:</h3>
         <ul>

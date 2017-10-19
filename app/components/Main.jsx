@@ -10,6 +10,7 @@ import Students from './Students';
 import SingleStudent from './SingleStudent';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
+import EditCampus from './EditCampus';
 import { fetchStudents, fetchCampuses } from '../store';
 
 export class Main extends Component {
@@ -31,7 +32,8 @@ export class Main extends Component {
           <Switch>
             <Route exact path='/campuses' component={Campuses} />
             <Route exact path='/campuses/add' component={AddCampus} />
-            <Route path='/campuses/:campusId' component={SingleCampus} />
+            <Route exact path='/campuses/:campusId' component={SingleCampus} />
+            <Route path='/campuses/:campusesId/edit' component={EditCampus} />
             <Route exact path='/students' component={Students} />
             <Route exact path='/students/add' component={AddStudent} />
             <Route exact path='/students/:studentsId' component={SingleStudent} />

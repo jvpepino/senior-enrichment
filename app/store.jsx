@@ -17,7 +17,7 @@ const intitalState = {
 // ACTION TYPES
 const GET_CAMPUS = 'GET_CAMPUS';
 const GET_CAMPUSES = 'GET_CAMPUSES';
-// const EDIT_CAMPUS = 'EDIT_CAMPUS';
+const EDIT_CAMPUS = 'EDIT_CAMPUS';
 
 const GET_STUDENTS = 'GET_STUDENTS';
 const GET_STUDENT = 'GET_STUDENT';
@@ -31,6 +31,10 @@ export function getCampus (campus) {
 
 export function getCampuses (campuses) {
   return { type: GET_CAMPUSES, campuses };
+}
+
+export function editCampus (campus) {
+  return { type: EDIT_CAMPUS, campus};
 }
 
 export function getStudent (student) {
@@ -104,6 +108,18 @@ export function updateStudent(student, history) {
       .catch(console.error.bind(console));
   };
 }
+
+export function updateCampus(campus, history) {
+  return function thunk(dispatch) {
+    return axios.put(`api/campuses/${campus.id}`, campus)
+      .then(res => res.data)
+      .then(updatedCampus => {
+        dispatch(editCampus(updatedCampus));
+        history.push(`/campuses/${updatedCampus.id}`);
+      })
+      .catch(console.error.bind(console));
+  };
+}
 // REDUCER
 
 function reducer (state = intitalState, action) {
@@ -125,12 +141,28 @@ function reducer (state = intitalState, action) {
     case EDIT_STUDENT: {
       const modStudentId = action.student.id;
       const newState = {...state};
-      const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId);
-      filteredStudentArr.push(action.student);
-      newState.students = filteredStudentArr;
+      const mapStudentsArr = newState.students.map(student => {
+        if (student.id !== modStudentId) {
+          return student;
+        } else return action.student
+      });
+      newState.students = mapStudentsArr;
       return newState;
     }
 
+    case EDIT_CAMPUS: {
+      const modCampusId = action.campus.id;
+      console.log(modCampusId);
+      const newState = {...state};
+      const mapCampusesArr = newState.campuses.map(campus => {
+        if (campus.id !== modCampusId) {
+          return campus;
+        } else return action.campus
+      });
+      console.log(mapCampusesArr);
+      newState.campuses = mapCampusesArr;
+      return newState;
+    }
 
     default:
       return state;
@@ -141,4 +173,9 @@ export default createStore(
   reducer,
   composeWithDevTools(applyMiddleware(thunkMiddleware, logger)));
 
-
+  // const modStudentId = action.student.id;
+  // const newState = {...state};
+  // const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId);
+  // filteredStudentArr.push(action.student);
+  // newState.students = filteredStudentArr;
+  // return newState;
