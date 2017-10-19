@@ -19,7 +19,6 @@ export class AddStudent extends Component {
       email: email.value,
       campusId: campusId.value
     });
-    this.props.history.push('/students');
   }
 
   render () {
@@ -28,6 +27,7 @@ export class AddStudent extends Component {
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>
         <h1>ADD STUDENT</h1>
+        <hr/><hr/><br/>
         <div className="input-group input-group-lg">
           <label>NAME: </label>
           <input
@@ -69,10 +69,11 @@ const mapStateToProps = function (state) {
   };
 };
 
-const mapDispatchToProps = function (dispatch) {
+const mapDispatchToProps = function (dispatch, ownProps) {
+  const history = ownProps.history;
   return {
     submitStudent: function(student) {
-      dispatch(postStudent(student));
+      dispatch(postStudent(student, history));
     }
   };
 };

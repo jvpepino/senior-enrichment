@@ -12,7 +12,7 @@ export class Campuses extends Component {
     return (
       <div>
       <h1>CAMPUS LIST</h1>
-      <hr/>
+      <hr/><hr/>
       <ul>
         {
           campuses && campuses.map(campus => (

@@ -15,6 +15,7 @@ const Campus = db.define('campus', {
   },
   image: {
     type: Sequelize.STRING,
+    allowNull: false,
     defaultValue: function () {
       return getRandomImage();
     }

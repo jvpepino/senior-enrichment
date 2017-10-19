@@ -12,7 +12,7 @@ export class Students extends Component {
     return (
       <div>
         <h1>STUDENT LIST</h1>
-        <hr/>
+        <hr/><hr/>
         <ul>
           {
             students && students.map(student => (

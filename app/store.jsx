@@ -47,17 +47,20 @@ export function fetchCampuses() {
       .then(res => res.data)
       .then(campuses => {
         dispatch(getCampuses(campuses));
-      });
+      })
+      .catch(console.error.bind(console));
   };
 }
 
-export function postCampus(campus) {
+export function postCampus(campus, history) {
   return function thunk(dispatch) {
     return axios.post('api/campuses', campus)
       .then(res => res.data)
       .then(newCampus => {
-        dispatch(getCampus(newCampus));
-      });
+        dispatch(getCampus(newCampus))
+        history.push(`/campuses/${newCampus.id}`);
+      })
+      .catch(console.error.bind(console));
   };
 }
 
@@ -67,17 +70,20 @@ export function fetchStudents() {
       .then(res => res.data)
       .then(students => {
         dispatch(getStudents(students));
-      });
+      })
+      .catch(console.error.bind(console));
   };
 }
 
-export function postStudent(student) {
+export function postStudent(student, history) {
   return function thunk(dispatch) {
     return axios.post('api/students', student)
       .then(res => res.data)
       .then(newStudent => {
         dispatch(getStudent(newStudent));
-      });
+        history.push(`/students/${newStudent.id}`);
+      })
+      .catch(console.error.bind(console));
   };
 }
 

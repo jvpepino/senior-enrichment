@@ -12,7 +12,7 @@ CampusRouter.get('/', (req, res, next) => {
 //POST - api/campuses
 CampusRouter.post('/', (req, res, next) => {
   Campus.findOrCreate({ where: req.body })
-    .then(campus => res.json(campus))
+    .then(([campus, bool]) => res.json(campus))
     .catch(next);
 });
 

@@ -16,7 +16,7 @@ export class SingleCampus extends Component {
     return (
       <div>
         <h1>CAMPUS</h1>
-        <hr/>
+        <hr/><hr/>
         <h2>{selectedCampus.name} </h2>
         <img src={ selectedCampus.image } />
         <h3>ENROLLMENT:</h3>

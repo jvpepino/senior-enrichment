@@ -25,7 +25,7 @@ export class AddCampus extends Component {
 
       return (
         <form id="new-message-form" onSubmit={this.handleSubmit}>
-          <h1>ADD CAMPUS</h1>
+          <h1>UPDATE STUDENT</h1>
           <hr /><hr /><br />
           <div className="input-group input-group-lg">
             <label>NAME: </label>
@@ -59,4 +59,3 @@ export class AddCampus extends Component {
   };
 
 export default connect(null, mapDispatchToProps)(AddCampus);
-
