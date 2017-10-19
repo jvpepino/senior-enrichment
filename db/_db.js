@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const debug = require('debug')('sql');
 const chalk = require('chalk');
 const Sequelize = require('sequelize');
@@ -15,5 +15,3 @@ module.exports = new Sequelize(connectionString, {
   native: true    // lets Sequelize know we can use pg-native for ~30% more speed (if you have issues with pg-native feel free to take this out and work it back in later when we have time to help)
 });
 
-// run our models file (makes all associations for our Sequelize objects)
-require('./models')
