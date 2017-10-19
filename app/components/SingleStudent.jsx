@@ -21,12 +21,13 @@ export class SingleStudent extends Component {
           <h3>CAMPUS: {selectedStudent.campus && selectedStudent.campus.name}</h3>
         </Link>
         <h3>E-MAIL: {selectedStudent.email}</h3>
+        <Link to={`/students/${selectedStudent.id}/edit`}>
+          <button className="btn btn-default">Edit</button>
+        </Link>
       </div>
     );
   }
 }
-
-
 
 const mapStateToProps = function (state) {
   return {

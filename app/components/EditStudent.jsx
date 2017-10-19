@@ -1,61 +1,82 @@
 'use strict';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { postCampus } from '../store';
+import { updateStudent } from '../store';
 
 
-export class AddCampus extends Component {
-    constructor(props) {
-      super(props);
+export class EditStudent extends Component {
+  constructor(props) {
+    super(props);
 
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(evt) {
-      evt.preventDefault();
-
-      const { name, image } = evt.target;
-      this.props.submitCampus({
-        name: name.value,
-        image: image.value || undefined
-      });
-    }
-
-    render () {
-
-      return (
-        <form id="new-message-form" onSubmit={this.handleSubmit}>
-          <h1>UPDATE STUDENT</h1>
-          <hr /><hr /><br />
-          <div className="input-group input-group-lg">
-            <label>NAME: </label>
-            <input
-              className="form-control"
-              type="text"
-              name="name"
-            />
-            <label>IMAGE-URL: </label>
-            <input
-              className="form-control"
-              type="text"
-              name="image"
-            />
-            <span className="input-group-btn">
-              <button className="btn btn-default" type="submit">Submit</button>
-            </span>
-          </div>
-        </form>
-      );
-    }
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  const mapDispatchToProps = function (dispatch, ownProps) {
-    const history = ownProps.history;
-    return {
-      submitCampus: function(campus) {
-        dispatch(postCampus(campus, history));
-      }
-    };
-  };
+  handleSubmit(evt, selectedStudent) {
+    evt.preventDefault();
 
-export default connect(null, mapDispatchToProps)(AddCampus);
+    const { name, email } = evt.target;
+    const sid = selectedStudent.id;
+    this.props.modStudent({
+      name: name.value,
+      email: email.value,
+      id: sid
+    });
+  }
+
+  render () {
+    const { students, campuses } = this.props;
+    const studentId = Number(this.props.match.params.studentsId);
+    const selectedStudent = students.length ? students.find(student => student.id === studentId) : {};
+
+    return (
+      <form id="new-message-form" onSubmit={(evt) => this.handleSubmit(evt, selectedStudent)}>
+        <h1>EDIT STUDENT</h1>
+        <hr /><hr /><br />
+        <div className="input-group input-group-lg">
+          <label>NAME: </label>
+          <input
+            className="form-control"
+            type="text"
+            name="name"
+            defaultValue={selectedStudent.name}
+          />
+          <label>EMAIL: </label>
+          <input
+            className="form-control"
+            type="text"
+            name="email"
+            defaultValue={selectedStudent.email}
+          />
+          <label>CAMPUS: </label>
+          <input
+            className="form-control"
+            type="text"
+            name="campusId"
+            defaultValue={selectedStudent.campus.name}
+          />
+          <span className="input-group-btn">
+            <button className="btn btn-default" type="submit">Submit</button>
+          </span>
+        </div>
+      </form>
+    );
+  }
+}
+
+const mapStateToProps = function (state) {
+  return {
+    students: state.students,
+    campuses: state.campuses
+  };
+};
+
+const mapDispatchToProps = function (dispatch, ownProps) {
+  const history = ownProps.history;
+  return {
+    modStudent: function(student) {
+      dispatch(updateStudent(student, history));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudent);

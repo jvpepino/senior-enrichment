@@ -17,9 +17,11 @@ const intitalState = {
 // ACTION TYPES
 const GET_CAMPUS = 'GET_CAMPUS';
 const GET_CAMPUSES = 'GET_CAMPUSES';
+// const EDIT_CAMPUS = 'EDIT_CAMPUS';
 
 const GET_STUDENTS = 'GET_STUDENTS';
 const GET_STUDENT = 'GET_STUDENT';
+const EDIT_STUDENT = 'EDIT_STUDENT';
 
 
 // ACTION CREATORS
@@ -37,6 +39,10 @@ export function getStudent (student) {
 
 export function getStudents (students) {
   return { type: GET_STUDENTS, students };
+}
+
+export function editStudent (student) {
+  return { type: EDIT_STUDENT, student};
 }
 
 // THUNK CREATORS
@@ -80,13 +86,37 @@ export function postStudent(student, history) {
     return axios.post('api/students', student)
       .then(res => res.data)
       .then(newStudent => {
-        dispatch(getStudent(newStudent));
+        dispatch(getStudents(newStudent));
         history.push(`/students/${newStudent.id}`);
       })
       .catch(console.error.bind(console));
   };
 }
 
+// export function updateStudent(student, history) {
+//   return function thunk(dispatch) {
+//     return axios.put(`api/students/${student.id}`, student)
+//       .then(res => axios.get('api/students'))
+//       .then(res => res.data)
+//       .then(students => {
+//         dispatch(getStudents(students));
+//         history.push(`/students/${student.id}`);
+//       })
+//       .catch(console.error.bind(console));
+//   };
+// }
+
+export function updateStudent(student, history) {
+  return function thunk(dispatch) {
+    return axios.put(`api/students/${student.id}`, student)
+      .then(res => res.data)
+      .then(updatedStudent => {
+        dispatch(editStudent(updatedStudent));
+        history.push(`/students/${updatedStudent.id}`);
+      })
+      .catch(console.error.bind(console));
+  };
+}
 // REDUCER
 
 function reducer (state = intitalState, action) {
@@ -104,6 +134,16 @@ function reducer (state = intitalState, action) {
 
     case GET_STUDENTS:
       return {...state, students: action.students};
+
+    case EDIT_STUDENT: {
+      const modStudentId = action.student.id;
+      const newState = {...state};
+      const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId)
+      filteredStudentArr.push(action.student)
+      newState.students = filteredStudentArr;
+      return newState;
+    }
+
 
     default:
       return state;
