@@ -104,10 +104,11 @@ export function removeCampus(campus, history) {
   return function thunk(dispatch) {
     axios.delete(`api/campuses/${campus.id}`, campus)
     .then(() => {
-        dispatch(deleteCampus(campus));
-        history.push(`/campuses`);
-      })
-      .catch(console.error.bind(console));
+      dispatch(deleteCampus(campus));
+      dispatch(getCampuses)
+      history.push('/campuses');
+    })
+    .catch(console.error.bind(console));
   };
 }
 
@@ -152,11 +153,10 @@ export function removeStudent(student, history) {
   return function thunk(dispatch) {
     axios.delete(`api/students/${student.id}`, student)
     .then(() => {
-        dispatch(deleteStudent(student));
-        console.log("TEST");
-        history.push(`/students`);
-      })
-      .catch(console.error.bind(console));
+      dispatch(deleteStudent(student));
+      history.push('/students');
+    })
+    .catch(console.error.bind(console));
   };
 }
 
@@ -187,8 +187,9 @@ function reducer (state = intitalState, action) {
     }
 
     case DELETE_CAMPUS: {
-      const filteredCampusArr = state.campus.filter(campus => campus.id !== action.campus.id );
-      return {...state, students: filteredCampusArr};
+      const filteredCampusArr = state.campuses.filter(campus => campus.id !== action.campus.id );
+      const filteredStudentArr = state.students.filter(student => student.campusId !== action.campus.id );
+      return {...state, campuses: filteredCampusArr, students: filteredStudentArr};
     }
 
     /////////////////////////////////////////////////////////////
