@@ -58,6 +58,7 @@ StudentRouter.get('/:studentId', (req, res) => {
 //PUT - api/students/:studentId
 StudentRouter.put('/:studentId', (req, res, next) => {
   req.student.update(req.body)
+    .then(student => student.reload())
     .then(student => res.status(200).json(student))
     .catch(next);
 });

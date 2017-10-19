@@ -86,25 +86,12 @@ export function postStudent(student, history) {
     return axios.post('api/students', student)
       .then(res => res.data)
       .then(newStudent => {
-        dispatch(getStudents(newStudent));
+        dispatch(getStudent(newStudent));
         history.push(`/students/${newStudent.id}`);
       })
       .catch(console.error.bind(console));
   };
 }
-
-// export function updateStudent(student, history) {
-//   return function thunk(dispatch) {
-//     return axios.put(`api/students/${student.id}`, student)
-//       .then(res => axios.get('api/students'))
-//       .then(res => res.data)
-//       .then(students => {
-//         dispatch(getStudents(students));
-//         history.push(`/students/${student.id}`);
-//       })
-//       .catch(console.error.bind(console));
-//   };
-// }
 
 export function updateStudent(student, history) {
   return function thunk(dispatch) {
@@ -138,8 +125,8 @@ function reducer (state = intitalState, action) {
     case EDIT_STUDENT: {
       const modStudentId = action.student.id;
       const newState = {...state};
-      const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId)
-      filteredStudentArr.push(action.student)
+      const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId);
+      filteredStudentArr.push(action.student);
       newState.students = filteredStudentArr;
       return newState;
     }

@@ -14,11 +14,12 @@ export class EditStudent extends Component {
   handleSubmit(evt, selectedStudent) {
     evt.preventDefault();
 
-    const { name, email } = evt.target;
+    const { name, email, campusId } = evt.target;
     const sid = selectedStudent.id;
     this.props.modStudent({
       name: name.value,
       email: email.value,
+      campusId: Number(campusId.value),
       id: sid
     });
   }
@@ -48,12 +49,18 @@ export class EditStudent extends Component {
             defaultValue={selectedStudent.email}
           />
           <label>CAMPUS: </label>
-          <input
-            className="form-control"
-            type="text"
-            name="campusId"
-            defaultValue={selectedStudent.campus.name}
-          />
+          <select
+          className="form-control"
+          type="text"
+          name="campusId"
+          defaultValue={selectedStudent.campusId}
+          >
+            {
+              campuses.map( campus =>
+                <option value={campus.id} key={campus.id}>{campus.name}</option>
+              )
+            }
+          </select>
           <span className="input-group-btn">
             <button className="btn btn-default" type="submit">Submit</button>
           </span>
