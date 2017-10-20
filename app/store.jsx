@@ -102,11 +102,10 @@ export function updateCampus(campus, history) {
 
 export function removeCampus(campus, history) {
   return function thunk(dispatch) {
-    axios.delete(`api/campuses/${campus.id}`, campus)
+    return axios.delete(`api/campuses/${campus.id}`)
     .then(() => {
-      dispatch(deleteCampus(campus));
-      dispatch(getCampuses)
       history.push('/campuses');
+      dispatch(deleteCampus(campus));
     })
     .catch(console.error.bind(console));
   };
@@ -151,10 +150,10 @@ export function updateStudent(student, history) {
 
 export function removeStudent(student, history) {
   return function thunk(dispatch) {
-    axios.delete(`api/students/${student.id}`, student)
+    return axios.delete(`api/students/${student.id}`, student)
     .then(() => {
-      dispatch(deleteStudent(student));
       history.push('/students');
+      dispatch(deleteStudent(student));
     })
     .catch(console.error.bind(console));
   };

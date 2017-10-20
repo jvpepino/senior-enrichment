@@ -31,8 +31,11 @@ export class Students extends Component {
                 <Link to={`/students/${student.id}`}>
                   <h3>#{student.id} - {student.name} - {student.campus.name}</h3>
                 </Link>
-                <button className="btn btn-default"
-                onClick={() => this.handleDelete(student)}>Delete</button>
+                <button
+                  className="btn btn-default"
+                  onClick={() => this.handleDelete(student)}
+                  >Delete
+                </button>
               </div>
             ))
           }
