@@ -5,19 +5,10 @@ import { Link } from 'react-router-dom';
 import { removeStudent } from '../store';
 
 export class SingleStudent extends Component {
-  constructor (props) {
-    super(props);
-
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleDelete (student) {
-    this.props.deleteStudent(student);
-  }
 
   render () {
 
-    const { students, campuses } = this.props;
+    const { students, deleteStudent } = this.props;
     const studentId = Number(this.props.match.params.studentsId);
     const selectedStudent = students.length ? students.find(student => student.id === studentId) : {};
 
@@ -36,7 +27,7 @@ export class SingleStudent extends Component {
         </Link>
         <button
           className="btn btn-default"
-          onClick={() => this.handleDelete(selectedStudent)}
+          onClick={() => deleteStudent(selectedStudent)}
           >Delete
         </button>
       </div>

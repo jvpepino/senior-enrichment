@@ -6,19 +6,9 @@ import { removeStudent } from '../store';
 
 export class Students extends Component {
 
-  constructor (props) {
-    super(props);
-
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleDelete (student) {
-    this.props.deleteStudent(student);
-  }
-
   render () {
 
-    const { students, campuses } = this.props;
+    const { students, deleteStudent } = this.props;
 
     return (
       <div>
@@ -33,7 +23,7 @@ export class Students extends Component {
                 </Link>
                 <button
                   className="btn btn-default"
-                  onClick={() => this.handleDelete(student)}
+                  onClick={() => deleteStudent(student)}
                   >Delete
                 </button>
               </div>

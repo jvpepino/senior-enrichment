@@ -3,13 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateStudent } from '../store';
 
-
 export class EditStudent extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
   handleSubmit(evt, selectedStudent) {
     evt.preventDefault();

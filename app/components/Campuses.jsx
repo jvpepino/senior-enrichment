@@ -5,19 +5,10 @@ import { Link } from 'react-router-dom';
 import { removeCampus } from '../store';
 
 export class Campuses extends Component {
-  constructor () {
-    super();
-
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleDelete (campus) {
-    this.props.deleteCampus(campus);
-  }
 
   render () {
 
-    const { students, campuses } = this.props;
+    const { students, campuses, deleteCampus } = this.props;
 
     return (
       <div>
@@ -33,7 +24,7 @@ export class Campuses extends Component {
               </Link>
               <button
                 className="btn btn-default"
-                onClick={() => this.handleDelete(campus)}
+                onClick={() => deleteCampus(campus)}
                 >Delete
               </button>
             </div>

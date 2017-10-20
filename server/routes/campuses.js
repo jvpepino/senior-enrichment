@@ -39,6 +39,10 @@ CampusRouter.get('/:campusId', (req, res) => {
 //PUT - api/campuses/:campusId
 CampusRouter.put('/:campusId', (req, res, next) => {
   req.campus.update(req.body)
+    .then(campus => {
+      return Student.findAll({where: {campusId: campus.id}})
+      .then(() => Campus.findById(campus.id));
+    })
     .then(campus => res.status(200).json(campus))
     .catch(next);
 });

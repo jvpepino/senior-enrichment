@@ -5,19 +5,9 @@ import { Link } from 'react-router-dom';
 import { removeCampus } from '../store';
 
 export class SingleCampus extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleDelete (campus) {
-    this.props.deleteCampus(campus);
-  }
 
   render () {
-
-    const { students, campuses } = this.props;
+    const { students, campuses, deleteCampus } = this.props;
     const campusId = Number(this.props.match.params.campusId);
     const selectedCampus = campuses.length ? campuses.find(campus => campus.id === campusId) : {};
     const filteredStudents = students.filter(student => student.campusId === campusId);
@@ -32,7 +22,7 @@ export class SingleCampus extends Component {
         </Link>
         <button
           className="btn btn-default"
-          onClick={() => this.handleDelete(selectedCampus)}
+          onClick={() => deleteCampus(selectedCampus)}
           >Delete
         </button>
         <img src={ selectedCampus.image } />

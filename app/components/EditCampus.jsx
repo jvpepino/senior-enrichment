@@ -3,13 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateCampus } from '../store';
 
-
 export class EditCampus extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
   handleSubmit(evt, selectedCampus) {
     evt.preventDefault();
@@ -24,7 +18,7 @@ export class EditCampus extends Component {
   }
 
   render () {
-    const { students, campuses } = this.props;
+    const { campuses } = this.props;
     const campusId = Number(this.props.match.params.campusesId);
     const selectedCampus = campuses.length ? campuses.find(campus => campus.id === campusId) : {};
 

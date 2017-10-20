@@ -1,26 +1,25 @@
 import { createStore, applyMiddleware } from 'redux';
-//import rootReducer from './reducers';
 import logger from 'redux-logger'; // https://github.com/evgenyrodionov/redux-logger
 import thunkMiddleware from 'redux-thunk'; // https://github.com/gaearon/redux-thunk
 import { composeWithDevTools } from 'redux-devtools-extension';
 import axios from 'axios';
 
 
-// INITIAL STATE
+////////////////////////////// INITIAL STATE ///////////////////////////////////
 
 const intitalState = {
   campuses: [],
   students: []
 };
 
+//////////////////////////////// ACTION TYPES //////////////////////////////////
 
-// ACTION TYPES
 const GET_CAMPUS = 'GET_CAMPUS';
 const GET_CAMPUSES = 'GET_CAMPUSES';
 const EDIT_CAMPUS = 'EDIT_CAMPUS';
 const DELETE_CAMPUS = 'DELETE_CAMPUS';
 
-////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 const GET_STUDENTS = 'GET_STUDENTS';
 const GET_STUDENT = 'GET_STUDENT';
@@ -28,7 +27,7 @@ const EDIT_STUDENT = 'EDIT_STUDENT';
 const DELETE_STUDENT = 'DELETE_STUDENT';
 
 
-// ACTION CREATORS
+/////////////////////////////// ACTION CREATORS ////////////////////////////////
 export function getCampus (campus) {
   return { type: GET_CAMPUS, campus };
 }
@@ -45,7 +44,7 @@ export function deleteCampus (campus) {
   return { type: DELETE_CAMPUS, campus};
 }
 
-///////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 export function getStudent (student) {
   return { type: GET_STUDENT, student };
@@ -63,7 +62,7 @@ export function deleteStudent (student) {
   return { type: DELETE_STUDENT, student};
 }
 
-// THUNK CREATORS
+//////////////////////////////// THUNK CREATORS ////////////////////////////////
 
 export function fetchCampuses() {
   return function thunk(dispatch) {
@@ -111,7 +110,7 @@ export function removeCampus(campus, history) {
   };
 }
 
-//////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 export function fetchStudents() {
   return function thunk(dispatch) {
@@ -159,7 +158,7 @@ export function removeStudent(student, history) {
   };
 }
 
-// REDUCER
+////////////////////////////////// REDUCERS ////////////////////////////////////
 
 function reducer (state = intitalState, action) {
 
@@ -172,26 +171,30 @@ function reducer (state = intitalState, action) {
       return {...state, campuses: action.campuses};
 
     case EDIT_CAMPUS: {
-      const modCampusId = action.campus.id;
-      console.log(modCampusId);
-      const newState = {...state};
-      const mapCampusesArr = newState.campuses.map(campus => {
-        if (campus.id !== modCampusId) {
-          return campus;
-        } else return action.campus
+      const mappedCampusesArr = state.campuses.map(campus => {
+        if (campus.id === action.campus.id) {
+          return action.campus;
+        } else return campus;
       });
-      console.log(mapCampusesArr);
-      newState.campuses = mapCampusesArr;
-      return newState;
+      const mappedStudentsArr = state.students.map(student => {
+        if (student.campusId === action.campus.id) {
+          student.campus = action.campus;
+        }
+        return student;
+      });
+      return {...state, campuses: mappedCampusesArr, students: mappedStudentsArr };
     }
 
     case DELETE_CAMPUS: {
-      const filteredCampusArr = state.campuses.filter(campus => campus.id !== action.campus.id );
-      const filteredStudentArr = state.students.filter(student => student.campusId !== action.campus.id );
-      return {...state, campuses: filteredCampusArr, students: filteredStudentArr};
+      function sortObjId(a,b) {
+          return a.id - b.id;
+      }
+      const filteredCampusesArr = state.campuses.filter(campus => campus.id !== action.campus.id).sort(sortObjId);
+      const filteredStudentsArr = state.students.filter(student => student.campusId !== action.campus.id).sort(sortObjId);
+      return {...state, campuses: filteredCampusesArr, students: filteredStudentsArr};
     }
 
-    /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
     case GET_STUDENT:
       return {...state, students: [...state.students, action.student]};
@@ -200,15 +203,12 @@ function reducer (state = intitalState, action) {
       return {...state, students: action.students};
 
     case EDIT_STUDENT: {
-      const modStudentId = action.student.id;
-      const newState = {...state};
-      const mapStudentsArr = newState.students.map(student => {
-        if (student.id !== modStudentId) {
-          return student;
-        } else return action.student
+      const mappedStudentsArr = state.students.map(student => {
+        if (student.id === action.student.id) {
+          return action.student;
+        } else return student;
       });
-      newState.students = mapStudentsArr;
-      return newState;
+      return {...state, students: mappedStudentsArr}
     }
 
     case DELETE_STUDENT: {
@@ -224,10 +224,3 @@ function reducer (state = intitalState, action) {
 export default createStore(
   reducer,
   composeWithDevTools(applyMiddleware(thunkMiddleware, logger)));
-
-  // const modStudentId = action.student.id;
-  // const newState = {...state};
-  // const filteredStudentArr = newState.students.filter(student => student.id !== modStudentId);
-  // filteredStudentArr.push(action.student);
-  // newState.students = filteredStudentArr;
-  // return newState;
