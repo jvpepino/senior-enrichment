@@ -2,12 +2,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { removeCampus } from '../store';
+import { removeCampus, removeStudent, postStudent } from '../store';
 
 export class SingleCampus extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(evt, selectedCampus) {
+    evt.preventDefault();
+
+    const { name, email } = evt.target;
+    const cid = selectedCampus.id;
+    this.props.submitStudent({
+      name: name.value,
+      email: email.value,
+      campusId: cid
+    });
+  }
 
   render () {
-    const { students, campuses, deleteCampus } = this.props;
+    const { students, campuses, deleteCampus, deleteStudent } = this.props;
     const campusId = Number(this.props.match.params.campusId);
     const selectedCampus = campuses.length ? campuses.find(campus => campus.id === campusId) : {};
     const filteredStudents = students.filter(student => student.campusId === campusId);
@@ -17,15 +34,38 @@ export class SingleCampus extends Component {
         <h1>CAMPUS</h1>
         <hr/><hr/>
         <h2>{selectedCampus.name} </h2>
+        <hr/>
         <Link to={`/campuses/${selectedCampus.id}/edit`}>
-          <button className="btn btn-default">Edit</button>
+          <button className="btn btn-default">Edit Campus</button>
         </Link>
         <button
           className="btn btn-default"
           onClick={() => deleteCampus(selectedCampus)}
-          >Delete
+          >Delete Campus
         </button>
+        <hr/>
         <img src={ selectedCampus.image } />
+        <form id="new-message-form" onSubmit={(evt) => this.handleSubmit(evt, selectedCampus)}>
+        <hr/>
+        <div className="input-group input-group-lg">
+          <label>NAME: </label>
+          <input
+            className="form-control"
+            type="text"
+            name="name"
+          />
+          <label>EMAIL: </label>
+          <input
+            className="form-control"
+            type="text"
+            name="email"
+          />
+          <span className="input-group-btn">
+            <button className="btn btn-default" type="submit">Add Student</button>
+          </span>
+        </div>
+        <hr/>
+      </form>
         <h3>ENROLLMENT:</h3>
         <ul>
           {
@@ -34,6 +74,11 @@ export class SingleCampus extends Component {
                 <Link to={`/students/${student.id}`}>
                   <h3>#{student.id} - {student.name}</h3>
                 </Link>
+                <button
+                  className="btn btn-default"
+                  onClick={() => deleteStudent(student)}
+                  >Delete Student
+                </button>
               </div>
             ))
           }
@@ -48,6 +93,12 @@ const mapDispatchToProps = function (dispatch, ownProps) {
   return {
     deleteCampus: function (campus) {
       dispatch(removeCampus(campus, history));
+    },
+    deleteStudent: function(student) {
+      dispatch(removeStudent(student, history));
+    },
+    submitStudent: function(student) {
+      dispatch(postStudent(student, history));
     }
   };
 };
@@ -60,3 +111,6 @@ const mapStateToProps = function (state) {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleCampus);
+
+
+
