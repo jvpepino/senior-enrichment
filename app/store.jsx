@@ -66,7 +66,7 @@ export function deleteStudent (student) {
 
 export function fetchCampuses() {
   return function thunk(dispatch) {
-    return axios.get('api/campuses')
+    return axios.get('/api/campuses')
       .then(res => res.data)
       .then(campuses => {
         dispatch(getCampuses(campuses));
@@ -77,7 +77,7 @@ export function fetchCampuses() {
 
 export function postCampus(campus, history) {
   return function thunk(dispatch) {
-    return axios.post('api/campuses', campus)
+    return axios.post('/api/campuses', campus)
       .then(res => res.data)
       .then(newCampus => {
         dispatch(getCampus(newCampus))
@@ -89,7 +89,7 @@ export function postCampus(campus, history) {
 
 export function updateCampus(campus, history) {
   return function thunk(dispatch) {
-    return axios.put(`api/campuses/${campus.id}`, campus)
+    return axios.put(`/api/campuses/${campus.id}`, campus)
       .then(res => res.data)
       .then(updatedCampus => {
         dispatch(editCampus(updatedCampus));
@@ -101,7 +101,7 @@ export function updateCampus(campus, history) {
 
 export function removeCampus(campus, history) {
   return function thunk(dispatch) {
-    return axios.delete(`api/campuses/${campus.id}`)
+    return axios.delete(`/api/campuses/${campus.id}`)
     .then(() => {
       history.push('/campuses');
       dispatch(deleteCampus(campus));
@@ -114,7 +114,7 @@ export function removeCampus(campus, history) {
 
 export function fetchStudents() {
   return function thunk(dispatch) {
-    return axios.get('api/students')
+    return axios.get('/api/students')
       .then(res => res.data)
       .then(students => {
         dispatch(getStudents(students));
@@ -125,11 +125,13 @@ export function fetchStudents() {
 
 export function postStudent(student, history) {
   return function thunk(dispatch) {
-    return axios.post('api/students', student)
+    return axios.post('/api/students', student)
       .then(res => res.data)
-      .then(newStudent => {
-        dispatch(getStudent(newStudent));
-        history.push(`/students/${newStudent.id}`);
+      .then(({student, bool}) => {
+        if (bool) {
+          dispatch(getStudent(student));
+        }
+        history.push(`/students/${student.id}`);
       })
       .catch(console.error.bind(console));
   };
@@ -137,7 +139,7 @@ export function postStudent(student, history) {
 
 export function updateStudent(student, history) {
   return function thunk(dispatch) {
-    return axios.put(`api/students/${student.id}`, student)
+    return axios.put(`/api/students/${student.id}`, student)
       .then(res => res.data)
       .then(updatedStudent => {
         dispatch(editStudent(updatedStudent));
@@ -149,7 +151,7 @@ export function updateStudent(student, history) {
 
 export function removeStudent(student, history) {
   return function thunk(dispatch) {
-    return axios.delete(`api/students/${student.id}`, student)
+    return axios.delete(`/api/students/${student.id}`, student)
     .then(() => {
       history.push('/students');
       dispatch(deleteStudent(student));

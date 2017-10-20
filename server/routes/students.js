@@ -10,28 +10,13 @@ StudentRouter.get('/', (req, res, next) => {
 });
 
 //POST - api/students
-// StudentRouter.post('/', (req, res, next) => {
-//   Student.findOrCreate({ where: req.body })
-//     .then(([student, bool]) => {
-//       return Campus.findById(req.body.campusId)
-//         .then(campus => {
-//           student = student.toJSON();
-//           student.campus = campus;
-//           return student;
-//         });
-//     })
-//     .then(student => res.json(student))
-//     .catch(next);
-// });
-
-//POST - api/students
 StudentRouter.post('/', (req, res, next) => {
   Student.findOrCreate({ where: req.body })
     .then(([student, bool]) => {
-      return student.reload();
+      return student.reload()
+      .then(() => res.json({student, bool}));
       // return Student.findById(student.id);
     })
-    .then(student => res.json(student))
     .catch(next);
 });
 

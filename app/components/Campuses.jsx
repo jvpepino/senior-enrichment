@@ -1,39 +1,36 @@
 'use strict';
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { removeCampus } from '../store';
 
-export class Campuses extends Component {
+export function Campuses (props) {
 
-  render () {
+  const { campuses, deleteCampus } = props;
 
-    const { students, campuses, deleteCampus } = this.props;
-
-    return (
-      <div>
-      <h1>CAMPUS LIST</h1>
-      <hr/><hr/>
-      <ul>
-        {
-          campuses && campuses.map(campus => (
-            <div key={campus.id}>
-              <Link to={`/campuses/${campus.id}`}>
-                <h3>#{campus.id} - {campus.name}</h3>
-                <img src={campus.image} />
-              </Link>
-              <button
-                className="btn btn-default"
-                onClick={() => deleteCampus(campus)}
-                >Delete
-              </button>
-            </div>
-          ))
-        }
-      </ul>
-      </div>
-    );
-  }
+  return (
+    <div>
+    <h1>CAMPUS LIST</h1>
+    <hr/><hr/>
+    <ul>
+      {
+        campuses && campuses.map(campus => (
+          <div key={campus.id}>
+            <Link to={`/campuses/${campus.id}`}>
+              <h3>#{campus.id} - {campus.name}</h3>
+              <img src={campus.image} />
+            </Link>
+            <button
+              className="btn btn-default"
+              onClick={() => deleteCampus(campus)}
+              >Delete
+            </button>
+          </div>
+        ))
+      }
+    </ul>
+    </div>
+  );
 }
 
 const mapDispatchToProps = function (dispatch, ownProps) {
